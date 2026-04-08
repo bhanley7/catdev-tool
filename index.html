@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Catherine's AI Skills</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0F0F1A;
+    color: #E8E8F0;
+    min-height: 100vh;
+    padding: 0 0 48px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #7B2FBE 0%, #E91E8C 100%);
+    padding: 32px 20px 26px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .header p {
+    font-size: 13px;
+    opacity: 0.9;
+    line-height: 1.5;
+  }
+  .header .subtitle {
+    font-size: 11px;
+    opacity: 0.75;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .how-to {
+    background: #1A1A2E;
+    border-left: 3px solid #7B2FBE;
+    margin: 20px 16px 0;
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #9090B0;
+  }
+  .how-to strong { color: #E8E8F0; }
+  .how-to .step { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0; }
+  .how-to .num {
+    background: #7B2FBE;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #6060A0;
+    padding: 24px 16px 10px;
+  }
+
+  .skill-card {
+    background: #1A1A2E;
+    border: 1px solid #2A2A45;
+    border-radius: 14px;
+    margin: 0 16px 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .skill-card:active { border-color: #7B2FBE; }
+
+  .skill-card .card-body {
+    padding: 18px 16px 6px;
+  }
+
+  .skill-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .skill-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .skill-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #E8E8F0;
+  }
+  .skill-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .badge-work { background: #1E3A5F; color: #58A6FF; }
+  .badge-life { background: #1F3A2A; color: #56D364; }
+
+  .skill-desc {
+    font-size: 13px;
+    color: #7070A0;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .skill-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .feature-tag {
+    background: #0F0F1A;
+    border: 1px solid #2A2A45;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: #7070A0;
+  }
+
+  .url-bar {
+    background: #0F0F1A;
+    border: 1px solid #2A2A45;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 10px;
+    color: #6060A0;
+    word-break: break-all;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .copy-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #7B2FBE 0%, #E91E8C 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    margin: 0 0 16px;
+    transition: opacity 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .copy-btn:active { transform: scale(0.98); opacity: 0.9; }
+  .copy-btn.copied {
+    background: linear-gradient(135deg, #1A7F37 0%, #2EA043 100%);
+  }
+
+  .divider {
+    height: 1px;
+    background: #2A2A45;
+    margin: 0 16px 14px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #4A4A70;
+    padding: 20px 16px 0;
+    line-height: 1.6;
+  }
+  .footer a { color: #7B2FBE; text-decoration: none; }
+  .footer .powered {
+    margin-top: 8px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #3A3A60;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Catherine's AI Skills</h1>
+  <p>Gemma 4 · Google AI Edge Gallery</p>
+  <p class="subtitle">Tap Copy URL &rarr; Paste into Edge Gallery</p>
+</div>
+
+<div class="how-to">
+  <div class="step"><span class="num">1</span><span>Tap <strong>Copy URL</strong> on a skill below</span></div>
+  <div class="step"><span class="num">2</span><span>Open <strong>Edge Gallery</strong> &rarr; select your Agent model</span></div>
+  <div class="step"><span class="num">3</span><span>Tap <strong>Agent Skills</strong> chip &rarr; <strong>(+)</strong> &rarr; <strong>Load skill from URL</strong></span></div>
+  <div class="step"><span class="num">4</span><span><strong>Paste &rarr; Load</strong> &#10003; (Edge Gallery adds /SKILL.md automatically)</span></div>
+</div>
+
+<div class="section-label">Available Skills</div>
+
+<!-- SKILL 1: Calendar Assistant -->
+<div class="skill-card">
+  <div class="card-body">
+    <div class="skill-header">
+      <span class="skill-icon">&#128197;</span>
+      <span class="skill-name">Calendar Assistant</span>
+      <span class="skill-badge badge-work">Work</span>
+    </div>
+    <div class="skill-desc">Schedules meetings, checks for conflicts, drafts calendar entries and reschedule messages. Knows you're in Pacific Time and use AWS tools like Chime and Zoom.</div>
+    <div class="skill-features">
+      <span class="feature-tag">Add meetings</span>
+      <span class="feature-tag">Conflict detection</span>
+      <span class="feature-tag">Reschedule</span>
+      <span class="feature-tag">Email drafts</span>
+      <span class="feature-tag">Week briefing</span>
+    </div>
+    <div class="url-bar" id="url-cal">https://bhanley7.github.io/catdev-tool/calendar-assistant</div>
+  </div>
+  <button class="copy-btn" onclick="copySkill(this, 'url-cal')">
+    &#128203; Copy URL for Edge Gallery
+  </button>
+</div>
+
+<!-- SKILL 2: Smart Reminders -->
+<div class="skill-card">
+  <div class="card-body">
+    <div class="skill-header">
+      <span class="skill-icon">&#128221;</span>
+      <span class="skill-name">Smart Reminders</span>
+      <span class="skill-badge badge-life">Life</span>
+    </div>
+    <div class="skill-desc">To-do lists, grocery runs, errands, work follow-ups &mdash; and dedicated dog care tracking for Loki and Luke (Munchie). Automatically categorizes everything you add.</div>
+    <div class="skill-features">
+      <span class="feature-tag">&#128062; Loki &amp; Munchie</span>
+      <span class="feature-tag">Grocery list</span>
+      <span class="feature-tag">Work tasks</span>
+      <span class="feature-tag">Errands</span>
+      <span class="feature-tag">Priority flags</span>
+    </div>
+    <div class="url-bar" id="url-rem">https://bhanley7.github.io/catdev-tool/smart-reminders</div>
+  </div>
+  <button class="copy-btn" onclick="copySkill(this, 'url-rem')">
+    &#128203; Copy URL for Edge Gallery
+  </button>
+</div>
+
+<div class="footer">
+  <p>Built for Catherine &hearts; by Brian</p>
+  <p><a href="https://github.com/bhanley7/catdev-tool">github.com/bhanley7/catdev-tool</a></p>
+  <p class="powered">Powered by DeepSenz.ai &middot; Gemma 4 On-Device</p>
+</div>
+
+<script>
+function copySkill(btn, urlId) {
+  const url = document.getElementById(urlId).textContent.trim();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => showCopied(btn))
+      .catch(() => fallbackCopy(btn, url));
+  } else {
+    fallbackCopy(btn, url);
+  }
+}
+
+function fallbackCopy(btn, text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showCopied(btn);
+}
+
+function showCopied(btn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = '&#10003; Copied! Paste into Edge Gallery';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.classList.remove('copied');
+  }, 3000);
+}
+</script>
+</body>
+</html>
