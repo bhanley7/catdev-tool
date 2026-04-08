@@ -87,14 +87,15 @@
     letter-spacing: 1.2px;
     text-transform: uppercase;
     color: var(--marine-deep);
-    padding: 24px 16px 10px;
+    padding: 32px 16px 16px;
+    margin-top: 8px;
   }
 
   .skill-card {
     background: rgba(255, 249, 237, 0.95);
     border: 1px solid var(--line);
     border-radius: 16px;
-    margin: 0 16px 14px;
+    margin: 0 16px 20px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(47, 93, 115, 0.08);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
@@ -193,13 +194,21 @@
     font-weight: 700;
     letter-spacing: 0.2px;
     cursor: pointer;
-    margin: 0 0 16px;
+    margin: 0 0 8px;
     transition: opacity 0.15s, transform 0.1s;
     -webkit-tap-highlight-color: transparent;
   }
   .copy-btn:active { transform: scale(0.98); opacity: 0.92; }
   .copy-btn.copied {
     background: linear-gradient(135deg, var(--success) 0%, var(--success-deep) 100%);
+  }
+
+  .copy-helper {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 16px;
+    line-height: 1.4;
   }
 
   .footer {
@@ -224,14 +233,18 @@
 <div class="header">
   <h1>Catherine's AI Skills</h1>
   <p>Gemma 4 · Google AI Edge Gallery</p>
-  <p class="subtitle">Tap Copy URL &rarr; Paste into Edge Gallery</p>
+  <p class="subtitle">Tap Blue Button Below &rarr; Paste into Edge Gallery</p>
 </div>
 
 <div class="how-to">
-  <div class="step"><span class="num">1</span><span>Tap <strong>Copy URL</strong> on a skill below</span></div>
-  <div class="step"><span class="num">2</span><span>Open <strong>Edge Gallery</strong> &rarr; select your Agent model</span></div>
-  <div class="step"><span class="num">3</span><span>Tap <strong>Agent Skills</strong> chip &rarr; <strong>(+)</strong> &rarr; <strong>Load skill from URL</strong></span></div>
-  <div class="step"><span class="num">4</span><span><strong>Paste &rarr; Load</strong> &#10003;</span></div>
+  <div class="step"><span class="num">1</span><span>Open this skill browser on your iPhone</span></div>
+  <div class="step"><span class="num">2</span><span>Tap the <strong>blue skill button</strong> below to load skill into clipboard</span></div>
+  <div class="step"><span class="num">3</span><span>Open <strong>Edge Gallery</strong> app &rarr; select your Agent model</span></div>
+  <div class="step"><span class="num">4</span><span>Tap <strong>Agent Skills</strong> chip</span></div>
+  <div class="step"><span class="num">5</span><span>Tap <strong>Skills</strong> tab</span></div>
+  <div class="step"><span class="num">6</span><span>Tap <strong>(+)</strong> button</span></div>
+  <div class="step"><span class="num">7</span><span>Tap <strong>Load skill from URL</strong></span></div>
+  <div class="step"><span class="num">8</span><span><strong>Paste</strong> &rarr; <strong>Load</strong> &#10003;</span></div>
 </div>
 
 <div class="section-label">Available Skills</div>
@@ -254,8 +267,9 @@
     <div class="url-bar" id="url-cal">https://bhanley7.github.io/catdev-tool/calendar-assistant</div>
   </div>
   <button class="copy-btn" onclick="copySkill(this, 'url-cal')">
-    &#128203; Copy URL for Edge Gallery
+    &#128204; Tap Me — Load Calendar Assistant to Clipboard
   </button>
+  <div class="copy-helper">Copies the skill link so you can paste it into Edge Gallery</div>
 </div>
 
 <div class="skill-card">
@@ -276,8 +290,9 @@
     <div class="url-bar" id="url-rem">https://bhanley7.github.io/catdev-tool/smart-reminders</div>
   </div>
   <button class="copy-btn" onclick="copySkill(this, 'url-rem')">
-    &#128203; Copy URL for Edge Gallery
+    &#128204; Tap Me — Load Smart Reminders to Clipboard
   </button>
+  <div class="copy-helper">Copies the skill link so you can paste it into Edge Gallery</div>
 </div>
 
 <div class="footer">
@@ -312,7 +327,7 @@ function fallbackCopy(btn, text) {
 
 function showCopied(btn) {
   const original = btn.innerHTML;
-  btn.innerHTML = '&#10003; Copied! Paste into Edge Gallery';
+  btn.innerHTML = '&#10003; Loaded to Clipboard! Now paste into Edge Gallery';
   btn.classList.add('copied');
   setTimeout(() => {
     btn.innerHTML = original;
