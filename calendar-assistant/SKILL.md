@@ -1,75 +1,332 @@
----
-name: calendar-assistant
-description: Personal calendar and scheduling assistant for Catherine - manages meetings, checks availability, detects conflicts, and drafts calendar entries for work and personal life.
----
-# Catherine's Calendar Assistant
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Catherine's AI Skills</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-## Persona
-You are Catherine's personal scheduling assistant. Catherine is an AWS Account Manager based in Los Angeles. She manages a busy calendar of client meetings, internal calls, team syncs, and personal appointments. You help her stay organized, avoid conflicts, and communicate clearly about her availability.
+  :root {
+    --cream: #F7F1E3;
+    --paper: #FFF9ED;
+    --ink: #1F1F1C;
+    --muted: #5D5A55;
+    --line: #D8D0C1;
+    --marine: #5C86A3;
+    --marine-deep: #2F5D73;
+    --marine-soft: #E4EEF4;
+    --seafoam: #D6E6E8;
+    --success: #5E8F6D;
+    --success-deep: #477658;
+  }
 
-Be concise, professional, and warm. Always confirm the key details of any meeting or appointment.
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #FBF7EF 0%, #F2EBDD 100%);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 48px;
+  }
 
-## What You Help With
+  .header {
+    background: linear-gradient(135deg, #7EA8C4 0%, #4D728C 100%);
+    color: #fffdf7;
+    padding: 32px 20px 26px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(47, 93, 115, 0.16);
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .header p {
+    font-size: 13px;
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+  .header .subtitle {
+    font-size: 11px;
+    opacity: 0.82;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
 
-### 1. Add a New Meeting or Appointment
-When Catherine describes a new event, extract and confirm:
-- **Title / Purpose** — e.g., "AWS client sync with Acme Corp"
-- **Date** — confirm day and date (e.g., "Tuesday April 14")
-- **Start time and end time** — default to 1 hour if not specified
-- **Location or link** — in-person address, Zoom, Chime, Teams, or phone
-- **Attendees** — names and/or email addresses
-- **Notes** — agenda, prep needed, or follow-up actions
+  .how-to {
+    background: rgba(255, 249, 237, 0.9);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--marine);
+    margin: 20px 16px 0;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    box-shadow: 0 6px 16px rgba(47, 93, 115, 0.08);
+  }
+  .how-to strong { color: var(--ink); }
+  .how-to .step { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0; }
+  .how-to .num {
+    background: var(--marine);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
 
-Output a clean, copy-ready calendar entry like this:
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--marine-deep);
+    padding: 24px 16px 10px;
+  }
 
-```
-MEETING: [Title]
-Date:    [Day, Month Date, Year]
-Time:    [Start] – [End] [Timezone]
-Where:   [Location / Link]
-Who:     [Attendees]
-Notes:   [Agenda / prep]
-```
+  .skill-card {
+    background: rgba(255, 249, 237, 0.95);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin: 0 16px 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(47, 93, 115, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+  }
+  .skill-card:active {
+    transform: scale(0.995);
+    border-color: var(--marine);
+    box-shadow: 0 8px 18px rgba(47, 93, 115, 0.12);
+  }
 
-### 2. Check Availability and Detect Conflicts
-When Catherine tells you what is already on her calendar and asks about a new event:
-- List any time conflicts clearly
-- Suggest alternative slots if there is a conflict
-- Confirm when a time slot is free
+  .skill-card .card-body {
+    padding: 18px 16px 6px;
+  }
 
-Example: "I have a client call 10–11am and a team standup 11:30am–noon. Can I fit a 45-min call at 11am?" → You identify the gap is only 30 minutes and flag the conflict.
+  .skill-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .skill-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .skill-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .skill-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: auto;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+  }
+  .badge-work {
+    background: #DCEAF2;
+    color: var(--marine-deep);
+    border-color: #BCD2DF;
+  }
+  .badge-life {
+    background: #DDE9E4;
+    color: #446B58;
+    border-color: #C4D6CC;
+  }
 
-### 3. Reschedule or Modify a Meeting
-When Catherine wants to move a meeting:
-- Confirm the original meeting details
-- Confirm the new date/time
-- Draft a short, professional reschedule message she can send to attendees
+  .skill-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
 
-### 4. Draft Scheduling Emails or Messages
-Write polite, professional messages for:
-- Requesting a meeting time
-- Confirming a meeting
-- Rescheduling or cancelling
-- Following up after a meeting
+  .skill-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .feature-tag {
+    background: var(--marine-soft);
+    border: 1px solid #C8D9E3;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--marine-deep);
+  }
 
-Match AWS professional tone — clear, concise, action-oriented.
+  .url-bar {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 10px;
+    color: var(--marine-deep);
+    word-break: break-all;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
 
-### 5. Weekly Calendar Briefing
-When Catherine says "brief me" or "what's my week look like", ask her to list her events and you will:
-- Organize them day by day
-- Flag any back-to-back meetings with no break
-- Highlight days that look overloaded (more than 5 hours of meetings)
-- Suggest where to block focus time
+  .copy-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #6E98B4 0%, #3F6B84 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    margin: 0 0 16px;
+    transition: opacity 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .copy-btn:active { transform: scale(0.98); opacity: 0.92; }
+  .copy-btn.copied {
+    background: linear-gradient(135deg, var(--success) 0%, var(--success-deep) 100%);
+  }
 
-## Key Details to Remember
-- **Catherine's timezone:** Pacific Time (PT) — Los Angeles
-- **Work calendar:** AWS meetings, client calls, account reviews
-- **Personal calendar:** Personal appointments, social events, errands
-- **AWS tools commonly used:** Amazon Chime, Zoom, Teams
-- **Always ask for timezone** if someone schedules from a different city
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0 16px 14px;
+  }
 
-## Response Style
-- Lead with the structured calendar entry or answer
-- Keep explanations short
-- If something is ambiguous, ask one clarifying question
-- Never exceed 200 words unless drafting a message
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 20px 16px 0;
+    line-height: 1.6;
+  }
+  .footer a { color: var(--marine-deep); text-decoration: none; }
+  .footer .powered {
+    margin-top: 8px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #6E7B80;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Catherine's AI Skills</h1>
+  <p>Gemma 4 · Google AI Edge Gallery</p>
+  <p class="subtitle">Tap Copy URL &rarr; Paste into Edge Gallery</p>
+</div>
+
+<div class="how-to">
+  <div class="step"><span class="num">1</span><span>Tap <strong>Copy URL</strong> on a skill below</span></div>
+  <div class="step"><span class="num">2</span><span>Open <strong>Edge Gallery</strong> &rarr; select your Agent model</span></div>
+  <div class="step"><span class="num">3</span><span>Tap <strong>Agent Skills</strong> chip &rarr; <strong>(+)</strong> &rarr; <strong>Load skill from URL</strong></span></div>
+  <div class="step"><span class="num">4</span><span><strong>Paste &rarr; Load</strong> &#10003; (Edge Gallery adds /SKILL.md automatically)</span></div>
+</div>
+
+<div class="section-label">Available Skills</div>
+
+<!-- SKILL 1: Calendar Assistant -->
+<div class="skill-card">
+  <div class="card-body">
+    <div class="skill-header">
+      <span class="skill-icon">&#128197;</span>
+      <span class="skill-name">Calendar Assistant</span>
+      <span class="skill-badge badge-work">Work</span>
+    </div>
+    <div class="skill-desc">Schedules meetings, checks for conflicts, drafts calendar entries and reschedule messages. Knows you're in Pacific Time and use AWS tools like Chime and Zoom.</div>
+    <div class="skill-features">
+      <span class="feature-tag">Add meetings</span>
+      <span class="feature-tag">Conflict detection</span>
+      <span class="feature-tag">Reschedule</span>
+      <span class="feature-tag">Email drafts</span>
+      <span class="feature-tag">Week briefing</span>
+    </div>
+    <div class="url-bar" id="url-cal">https://bhanley7.github.io/catdev-tool/calendar-assistant</div>
+  </div>
+  <button class="copy-btn" onclick="copySkill(this, 'url-cal')">
+    &#128203; Copy URL for Edge Gallery
+  </button>
+</div>
+
+<!-- SKILL 2: Smart Reminders -->
+<div class="skill-card">
+  <div class="card-body">
+    <div class="skill-header">
+      <span class="skill-icon">&#128221;</span>
+      <span class="skill-name">Smart Reminders</span>
+      <span class="skill-badge badge-life">Life</span>
+    </div>
+    <div class="skill-desc">To-do lists, grocery runs, errands, work follow-ups &mdash; and dedicated dog care tracking for Loki and Luke (Munchie). Automatically categorizes everything you add.</div>
+    <div class="skill-features">
+      <span class="feature-tag">&#128062; Loki &amp; Munchie</span>
+      <span class="feature-tag">Grocery list</span>
+      <span class="feature-tag">Work tasks</span>
+      <span class="feature-tag">Errands</span>
+      <span class="feature-tag">Priority flags</span>
+    </div>
+    <div class="url-bar" id="url-rem">https://bhanley7.github.io/catdev-tool/smart-reminders</div>
+  </div>
+  <button class="copy-btn" onclick="copySkill(this, 'url-rem')">
+    &#128203; Copy URL for Edge Gallery
+  </button>
+</div>
+
+<div class="footer">
+  <p>Built for Catherine &hearts; by Brian</p>
+  <p><a href="https://github.com/bhanley7/catdev-tool">github.com/bhanley7/catdev-tool</a></p>
+  <p class="powered">Powered by DeepSenz.ai &middot; Gemma 4 On-Device</p>
+</div>
+
+<script>
+function copySkill(btn, urlId) {
+  const url = document.getElementById(urlId).textContent.trim();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => showCopied(btn))
+      .catch(() => fallbackCopy(btn, url));
+  } else {
+    fallbackCopy(btn, url);
+  }
+}
+
+function fallbackCopy(btn, text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showCopied(btn);
+}
+
+function showCopied(btn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = '&#10003; Copied! Paste into Edge Gallery';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.classList.remove('copied');
+  }, 3000);
+}
+</script>
+</body>
+</html>
